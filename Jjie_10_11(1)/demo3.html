@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <style>
+        /*!*标签选择器，所有同类型标签设置成一样，没办法差异化*!*/
+        /*p{ */
+        /*    color: red;*/
+        /*}*/
+
+
+        /*定义类选择器：.类名（.+类名）*/
+        .green{
+            color : darkcyan;
+        }
+        .large{
+            font-size : 30px;
+        }
+    </style>
+</head>
+<body>
+    <p class="green">JJ喜欢璐璐</p>
+    <p class="green"> 璐璐喜欢JJ</p>
+    <div class="green"> 要一直一直在一起</div>
+    <!--    一个标签只能加一个class属性 但可以赋值多个 用空格隔开     -->
+    <div class="green large"> 要一直一直在一起</div>
+</body>
+</html>
