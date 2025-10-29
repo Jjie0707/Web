@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册界面的设计</title>
+    <style>
+        .s1{
+            color: darkred;
+            font-size: 40px;
+            text-align: center;
+        }
+        .s2{
+            color: coral;
+            font-size: 28px;
+
+        }
+        li{
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+    <h2 class="s1">用户注册界面</h2>
+    <form>
+        <ul>
+            <li>
+                <h3 class="s2">请输入账号</h3>
+
+                <div>
+                    <label>*账号：</label>
+                    <input type="text" placeholder="仅由数字和字符组成">
+                </div>
+            </li>
+            <br>
+
+            <li>
+                <h3 class="s2">填写安全设置</h3>
+
+                <div>
+                    <label>*密码：</label>
+                    <input type="password" placeholder="长度为8~16位">
+                    <br>
+
+                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*确认密码: </label>
+                    <input type="password" placeholder="请再次输入密码">
+                    <br>
+
+                    <label>*密保问题</label>
+                    <select>
+                        <option>生日</option>
+                        <option>地址</option>
+                        <option>姓名</option>
+                        <option>电话</option>
+                    </select>
+                    <br>
+
+                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*密保答案:</label>
+                    <input type="text" placeholder="用于找回您的密码">
+                </div>
+            </li>
+            <br>
+
+            <li>
+                <h3 class="s2">请输入个人信息</h3>
+                <div>
+                    <label>*姓名：</label>
+                    <input type="text" placeholder="请输入姓名">
+                    <br>
+
+                    <label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*性别：</label>
+                    <label><input type="radio" name="sex">男</label>
+                    <label><input type="radio" name="sex">女</label>
+                    <br>
+
+                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*出生年月：</label>
+                    <select>
+                        <option>2004</option>
+                        <option>2005</option>
+                        <option>2006</option>
+                        <option selected>2007</option>
+                    </select>
+                    <select>
+                        <option selected>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                    </select>
+                    <br>
+
+                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*籍贯:</label>
+                    <select> <option>请选择省份</option></select>
+                    <select> <option>请选择城市</option></select>
+                    <br>
+
+                    <label>*学院：</label>
+                    <select> <option> 请选择你所在学院</option></select>
+                    <br>
+
+                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*专业班级：</label>
+                    <input type="text" placeholder="专业+班级">
+                    <br>
+
+                    <label>*个人照片</label><br>
+                    <img style="width: 150px" src="./src/img/OIP-C.jpg" alt="太帅无法显示"><br>
+                    <input type="file">
+                    <br>
+
+                    <label>*电话号码：</label>
+                    <input type="text" placeholder="输入个人电话">
+                    <br>
+
+                    <label>*身份证号:</label>
+                    <input type="text" placeholder="18位本人身份证号">
+                    <br>
+                </div>
+            </li>
+            <br>
+
+            <li>
+                <h3 class="s2">请输入验证信息</h3>
+
+                <div>
+                    <label>*请输入验证码：</label>
+                    <input type="text">
+                    <br>
+
+                    <input style="text-align: center" type="checkbox">
+                    <label>我已阅读并同意</label> <a href="#">《用户协议》</a>
+                    <br>
+
+                    <button>提交</button> <button type="reset">重置</button>
+                </div>
+            </li>
+        </ul>
+    </form>
+</body>
+</html> 
