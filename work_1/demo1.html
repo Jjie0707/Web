@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册界面的设计</title>
+    <style>
+        .s1{
+            color: darkred;
+            font-size: 40px;
+            text-align: center;
+        }
+        .s2{
+            color: coral;
+            font-size: 28px;
+        }
+        li{
+            font-size: 25px;
+        }
+        /* 新增：错误提示样式 */
+        .error{
+            color:red;
+            font-size:14px;
+            margin-top:4px;
+        }
+    </style>
+</head>
+<body>
+<h2 class="s1">用户注册界面</h2>
+<form id="registerForm">
+    <ul>
+        <li>
+            <h3 class="s2">请输入账号</h3>
+            <div>
+                <label>*账号：</label>
+                <input type="text" id="username" placeholder="仅由数字和字符组成">
+                <div id="usernameError" class="error"></div>
+            </div>
+        </li>
+        <br>
+
+        <li>
+            <h3 class="s2">填写安全设置</h3>
+            <div>
+                <label>*密码：</label>
+                <input type="password" id="password" placeholder="长度为8~16位">
+                <div id="passwordError" class="error"></div>
+                <br>
+
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*确认密码: </label>
+                <input type="password" id="confirmPassword" placeholder="请再次输入密码">
+                <div id="confirmPasswordError" class="error"></div>
+                <br>
+
+                <label>*密保问题</label>
+                <select>
+                    <option>生日</option>
+                    <option>地址</option>
+                    <option>姓名</option>
+                    <option>电话</option>
+                </select>
+                <br>
+
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*密保答案:</label>
+                <input type="text" placeholder="用于找回您的密码">
+            </div>
+        </li>
+        <br>
+
+        <li>
+            <h3 class="s2">请输入个人信息</h3>
+            <div>
+                <label>*姓名：</label>
+                <input type="text" placeholder="请输入姓名">
+                <br>
+
+                <label >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*性别：</label>
+                <label><input type="radio" name="sex">男</label>
+                <label><input type="radio" name="sex">女</label>
+                <br>
+
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*出生年月：</label>
+                <select>
+                    <option>2004</option>
+                    <option>2005</option>
+                    <option>2006</option>
+                    <option selected>2007</option>
+                </select>
+                <select>
+                    <option selected>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                </select>
+                <br>
+
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*籍贯:</label>
+                <select> <option>请选择省份</option></select>
+                <select> <option>请选择城市</option></select>
+                <br>
+
+                <label>*学院：</label>
+                <select> <option> 请选择你所在学院</option></select>
+                <br>
+
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*专业班级：</label>
+                <input type="text" placeholder="专业+班级">
+                <br>
+
+                <label>*个人照片</label><br>
+                <img style="width: 150px" src="./src/img/OIP-C.jpg" alt="太帅无法显示"><br>
+                <input type="file">
+                <br>
+
+                <label>*电话号码：</label>
+                <input type="text" id="phone" placeholder="输入个人电话">
+                <div id="phoneError" class="error"></div>
+                <br>
+
+                <label>*身份证号:</label>
+                <input type="text" id="idCard" placeholder="18位本人身份证号">
+                <div id="idCardError" class="error"></div>
+                <br>
+            </div>
+        </li>
+        <br>
+
+        <li>
+            <h3 class="s2">请输入验证信息</h3>
+            <div>
+                <label>*请输入验证码：</label>
+                <input type="text">
+                <br>
+
+                <input style="text-align: center" type="checkbox">
+                <label>我已阅读并同意</label> <a href="#">《用户协议》</a>
+                <br>
+
+                <button type="submit">提交</button> <button type="reset">重置</button>
+            </div>
+        </li>
+    </ul>
+</form>
+
+<script>
+    function $(id){return document.getElementById(id);}
+    function showErr(el,msg){el.textContent=msg;}
+    function hideErr(el){el.textContent='';}
+
+    /* ---------- 正则 ---------- */
+    const USER_RE  = /^[A-Za-z0-9]+$/;
+    const PHONE_RE = /^1[3-9]\d{9}$/;
+    const ID_RE15  = /^\d{15}$/;
+    const ID_RE18  = /^\d{17}[\dXx]$/;
+
+    /* ---------- 校验函数 ---------- */
+    function checkUser(){
+        const v=$('username').value.trim(), e=$('usernameError');
+        if(!v){showErr(e,'账号不能为空');return false;}
+        if(!USER_RE.test(v)){showErr(e,'只能含字母或数字');return false;}
+        hideErr(e);return true;
+    }
+    function checkPwd(){
+        const v=$('password').value, e=$('passwordError');
+        if(!v){showErr(e,'密码不能为空');return false;}
+        if(v.length<8||v.length>16){showErr(e,'8~16位');return false;}
+        hideErr(e);return true;
+    }
+    function checkPwd2(){
+        const e=$('confirmPasswordError');
+        if($('confirmPassword').value!==$('password').value){showErr(e,'两次密码不一致');return false;}
+        hideErr(e);return true;
+    }
+    function checkPhone(){
+        const v=$('phone').value.trim(), e=$('phoneError');
+        if(!v){showErr(e,'手机号不能为空');return false;}
+        if(!PHONE_RE.test(v)){showErr(e,'11位数字，以1开头');return false;}
+        hideErr(e);return true;
+    }
+    function checkIdCard(){
+        const v=$('idCard').value.trim(), e=$('idCardError');
+        if(!v){showErr(e,'身份证号不能为空');return false;}
+        if(!ID_RE15.test(v)&&!ID_RE18.test(v)){showErr(e,'格式错误');return false;}
+        /* 18位再做校验码检查 */
+        if(v.length===18){
+            const w=[7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2], c=['1','0','X','9','8','7','6','5','4','3','2'];
+            let sum=0;for(let i=0;i<17;i++)sum+=parseInt(v[i])*w[i];
+            if(v[17].toUpperCase()!==c[sum%11]){showErr(e,'校验码错误');return false;}
+        }
+        hideErr(e);return true;
+    }
+
+    $('username').addEventListener('blur',checkUser);
+    $('password').addEventListener('blur',checkPwd);
+    $('confirmPassword').addEventListener('blur',checkPwd2);
+    $('phone').addEventListener('blur',checkPhone);
+    $('idCard').addEventListener('blur',checkIdCard);
+
+    $('registerForm').addEventListener('submit',function(ev){
+        ev.preventDefault();
+        const ok=checkUser()&checkPwd()&checkPwd2()&checkPhone()&checkIdCard();
+        if(!ok){alert('请修正提示错误后再提交');return;}
+        alert('注册成功！');
+        this.submit();
+    });
+</script>
+</body>
+</html>
