@@ -1,0 +1,8 @@
+### 发树洞
+POST http://localhost:8000/api/posts
+Content-Type: application/json
+
+{"text": "你好，树洞"}
+
+### 拿列表
+GET http://localhost:8000/api/posts
