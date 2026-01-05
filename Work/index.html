@@ -8,13 +8,17 @@
         textarea{width:100%;max-width:500px;height:80px}
         button{margin-top:8px;padding:6px 16px}
         ul{list-style:none;padding:0;margin-top:20px;max-width:500px}
-        li{background:#fff;margin-bottom:8px;padding:10px;border-radius:4px}
+        li{background:#fff;margin-bottom:8px;padding:10px;border-radius:4px;display:flex;justify-content:space-between;align-items:center}
     </style>
 </head>
 <body>
 <h2>匿名树洞</h2>
 <textarea id="text" placeholder="说点什么..."></textarea><br>
 <button onclick="publish()">发布</button>
+<select id="sort" onchange="load()" style="margin-left:8px;">
+    <option value="time">最新</option>
+    <option value="hot">最热</option>
+</select>
 
 <ul id="list"></ul>
 
