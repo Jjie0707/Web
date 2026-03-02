@@ -2,25 +2,454 @@
 <html lang="zh">
 <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>匿名树洞</title>
     <style>
-        body{font-family:system-ui;background:#f7f7f7;margin:0;padding:20px}
-        textarea{width:100%;max-width:500px;height:80px}
-        button{margin-top:8px;padding:6px 16px}
-        ul{list-style:none;padding:0;margin-top:20px;max-width:500px}
-        li{background:#fff;margin-bottom:8px;padding:10px;border-radius:4px;display:flex;justify-content:space-between;align-items:center}
+        :root{
+            --bg-1:#f7fbff;
+            --bg-2:#eef6ff;
+            --ink:#13213f;
+            --card:#ffffffd9;
+            --line:#d6e2ff;
+            --accent:#155eef;
+            --accent-soft:#e6efff;
+            --danger:#dc3f4f;
+            --danger-soft:#ffe6ea;
+            --like-on:#f27c12;
+            --like-on-soft:#fff3e5;
+            --glow:#8db5ff44;
+        }
+        body[data-theme="forest"]{
+            --bg-1:#f2fbf6;
+            --bg-2:#e8f6ef;
+            --ink:#163126;
+            --card:#ffffffd9;
+            --line:#cde7d8;
+            --accent:#1f9d63;
+            --accent-soft:#e4f8ee;
+            --danger:#d14558;
+            --danger-soft:#ffe8ec;
+            --like-on:#c97c1d;
+            --like-on-soft:#fff4e8;
+            --glow:#73d39a44;
+        }
+        body[data-theme="sunset"]{
+            --bg-1:#fff8f3;
+            --bg-2:#fff0e6;
+            --ink:#3a2017;
+            --card:#fffdfbd9;
+            --line:#f5d9c8;
+            --accent:#ef6a2e;
+            --accent-soft:#fff0e8;
+            --danger:#d54155;
+            --danger-soft:#ffe8ee;
+            --like-on:#ca7e16;
+            --like-on-soft:#fff5e4;
+            --glow:#ffb78f44;
+        }
+        *{box-sizing:border-box}
+        body{
+            margin:0;
+            font-family:"Avenir Next","PingFang SC","Noto Sans CJK SC","Segoe UI",sans-serif;
+            color:var(--ink);
+            background:
+                radial-gradient(900px 420px at 8% -8%, #cfe0ff 0%, transparent 60%),
+                radial-gradient(700px 380px at 100% 0%, #d8f3ff 0%, transparent 60%),
+                linear-gradient(170deg,var(--bg-1),var(--bg-2));
+            min-height:100vh;
+            padding:clamp(14px,3vw,28px) clamp(10px,3.2vw,22px);
+            position:relative;
+            overflow-x:hidden;
+        }
+        body::before,
+        body::after{
+            content:"";
+            position:fixed;
+            width:360px;
+            height:360px;
+            border-radius:50%;
+            filter:blur(70px);
+            z-index:-1;
+            pointer-events:none;
+        }
+        body::before{
+            background:#99bbff59;
+            left:-120px;
+            top:-120px;
+        }
+        body::after{
+            background:#8be6ff42;
+            right:-120px;
+            bottom:-150px;
+        }
+        .shell{
+            width:min(980px,100%);
+            margin:0 auto;
+        }
+        .masthead{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:14px;
+            margin-bottom:10px;
+            flex-wrap:wrap;
+        }
+        .status-board{
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+        }
+        .theme-switch{
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+            margin-top:8px;
+        }
+        .theme-btn{
+            border:1px solid #d6e2ff;
+            background:#ffffffbf;
+            color:#3f578a;
+            border-radius:999px;
+            padding:6px 11px;
+            font-size:12px;
+            font-weight:700;
+            letter-spacing:.02em;
+            cursor:pointer;
+        }
+        .theme-btn.is-active{
+            color:#fff;
+            border-color:transparent;
+            background:linear-gradient(135deg,#3f7dff,#2d6bf2);
+            box-shadow:0 8px 18px #8bb2ff66;
+        }
+        .badge{
+            border:1px solid #d6e2ff;
+            background:linear-gradient(135deg,#f4f8ff,#f9fbff);
+            color:#40588d;
+            border-radius:999px;
+            padding:6px 11px;
+            font-size:12px;
+            font-weight:700;
+            letter-spacing:.02em;
+            box-shadow:0 6px 16px #a8bee733;
+        }
+        .title{
+            margin:0 0 6px;
+            font-size:clamp(28px,4vw,40px);
+            letter-spacing:.035em;
+            text-shadow:0 6px 24px #abc5ff6b;
+        }
+        .subtitle{
+            margin:0 0 22px;
+            color:#53607f;
+            max-width:56ch;
+        }
+        .composer{
+            background:var(--card);
+            border:1px solid var(--line);
+            border-radius:20px;
+            padding:clamp(10px,2vw,14px);
+            backdrop-filter: blur(8px);
+            box-shadow:0 16px 36px #a7bbec38, inset 0 1px 0 #ffffffd9;
+            transition:transform .22s ease, box-shadow .22s ease;
+            position:relative;
+            overflow:hidden;
+        }
+        .composer::before{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            height:3px;
+            background:linear-gradient(90deg,#83a9ff,#74dfff);
+            opacity:.7;
+        }
+        .composer:hover{
+            transform:translateY(-1px);
+            box-shadow:0 22px 42px #a7bbec40, inset 0 1px 0 #ffffffd9;
+        }
+        textarea{
+            width:100%;
+            min-height:96px;
+            border:1px solid var(--line);
+            border-radius:12px;
+            padding:12px;
+            resize:vertical;
+            font:inherit;
+            color:var(--ink);
+            background:#fff;
+            transition:border-color .2s ease, box-shadow .2s ease;
+        }
+        textarea:focus{
+            outline:none;
+            border-color:#9ab8ff;
+            box-shadow:0 0 0 4px #dcebff;
+        }
+        .toolbar{
+            display:flex;
+            gap:10px;
+            align-items:center;
+            justify-content:space-between;
+            margin-top:10px;
+            flex-wrap:wrap;
+        }
+        .toolbar-left{display:flex;gap:10px;align-items:center}
+        button,select{
+            font:inherit;
+            border-radius:10px;
+            border:1px solid var(--line);
+            padding:8px 14px;
+            background:#fff;
+            cursor:pointer;
+            min-height:40px;
+            transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease, border-color .15s ease;
+        }
+        button:hover,select:hover{
+            transform:translateY(-1px);
+            box-shadow:0 8px 18px #acc2f33d;
+        }
+        .btn-primary{
+            background:linear-gradient(135deg,#256cff,#155eef);
+            color:#fff;
+            border-color:#2c69ef;
+            font-weight:600;
+            box-shadow:0 10px 22px #3a75f44d;
+        }
+        ul{
+            list-style:none;
+            padding:0;
+            margin:18px 0 0;
+            display:grid;
+            gap:12px;
+        }
+        .post{
+            background:var(--card);
+            border:1px solid var(--line);
+            border-radius:16px;
+            padding:14px;
+            box-shadow:0 10px 22px #a8bee73a, inset 0 1px 0 #ffffffdb;
+            transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+            animation:fadeUp .28s ease both;
+            animation-delay:calc(var(--i, 0) * 0.035s);
+            position:relative;
+            overflow:hidden;
+        }
+        .post::before{
+            content:"";
+            position:absolute;
+            left:0;
+            top:0;
+            bottom:0;
+            width:3px;
+            background:linear-gradient(180deg,#89acff,#7be3ff);
+            opacity:.5;
+        }
+        .post:hover{
+            transform:translateY(-2px);
+            box-shadow:0 16px 30px #a8bee74a;
+            border-color:#c8d8ff;
+        }
+        .post-empty{
+            text-align:center;
+            color:#5a6a90;
+            font-weight:600;
+            border-style:dashed;
+            background:linear-gradient(135deg,#f8fbff,#f2f7ff);
+        }
+        .post-text{
+            margin:0 0 12px;
+            white-space:pre-wrap;
+            word-break:break-word;
+            line-height:1.55;
+        }
+        .post-footer{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+            flex-wrap:wrap;
+        }
+        .post-meta{
+            display:flex;
+            align-items:center;
+            gap:8px;
+            flex-wrap:wrap;
+        }
+        .who{
+            display:inline-flex;
+            align-items:center;
+            border-radius:999px;
+            padding:6px 10px;
+            font-weight:700;
+            font-size:13px;
+            letter-spacing:.02em;
+        }
+        .who-me{
+            background:linear-gradient(135deg,#e6ffef,#e8fff4);
+            color:#177045;
+            border:1px solid #b9efd0;
+        }
+        .who-other{
+            background:linear-gradient(135deg,#f1f5ff,#f5f8ff);
+            color:#40588d;
+            border:1px solid #d7e2ff;
+        }
+        .time{
+            display:inline-flex;
+            align-items:center;
+            color:#6a7695;
+            background:#f8faff;
+            border:1px solid #e4ebff;
+            border-radius:999px;
+            padding:6px 10px;
+            font-size:13px;
+            font-weight:500;
+        }
+        .like-count{
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            color:#36466d;
+            background:#f7f9ff;
+            border:1px solid var(--line);
+            border-radius:999px;
+            padding:6px 10px;
+            font-weight:600;
+            min-width:68px;
+            justify-content:center;
+        }
+        .actions{display:flex;gap:8px}
+        .btn-like{
+            background:var(--accent-soft);
+            color:var(--accent);
+            border-color:#cedcff;
+            font-weight:600;
+            box-shadow:0 6px 14px #9fb8f02e;
+        }
+        .btn-like.is-liked{
+            background:linear-gradient(135deg,var(--like-on-soft),#fff5ea);
+            color:var(--like-on);
+            border-color:#ffd1a8;
+            box-shadow:0 8px 18px #ffb47442;
+        }
+        .btn-unlike{
+            background:var(--danger-soft);
+            color:var(--danger);
+            border-color:#ffc7c7;
+            font-weight:600;
+            box-shadow:0 6px 14px #f2afb72b;
+        }
+        .btn-unlike:disabled{
+            opacity:.45;
+            cursor:not-allowed;
+        }
+        .is-loading{
+            opacity:.7;
+            cursor:wait;
+        }
+        @media (max-width: 720px){
+            .masthead{
+                margin-bottom:8px;
+            }
+            .subtitle{
+                margin-bottom:16px;
+                font-size:14px;
+            }
+            .status-board{
+                width:100%;
+            }
+            .theme-switch{
+                width:100%;
+            }
+            .badge{
+                flex:1;
+                justify-content:center;
+                text-align:center;
+                min-width:120px;
+            }
+            .toolbar{
+                align-items:stretch;
+            }
+            .toolbar-left,
+            .toolbar select{
+                width:100%;
+            }
+            .btn-primary,
+            .toolbar select{
+                width:100%;
+            }
+            .post{
+                padding:12px;
+                border-radius:14px;
+            }
+            .post-footer{
+                align-items:stretch;
+            }
+            .post-meta{
+                width:100%;
+            }
+            .actions{
+                width:100%;
+                display:grid;
+                grid-template-columns:1fr 1fr;
+            }
+            .actions button{
+                width:100%;
+            }
+        }
+        @media (min-width: 1100px){
+            .shell{
+                width:min(1060px,100%);
+            }
+            ul{
+                grid-template-columns:1fr 1fr;
+                gap:14px;
+            }
+            .composer{
+                margin-bottom:4px;
+            }
+        }
+        @keyframes fadeUp{
+            from{opacity:0;transform:translateY(8px)}
+            to{opacity:1;transform:translateY(0)}
+        }
     </style>
 </head>
 <body>
-<h2>匿名树洞</h2>
-<textarea id="text" placeholder="说点什么..."></textarea><br>
-<button onclick="publish()">发布</button>
-<select id="sort" onchange="load()" style="margin-left:8px;">
-    <option value="time">最新</option>
-    <option value="hot">最热</option>
-</select>
+<main class="shell">
+    <section class="masthead">
+        <div>
+            <h1 class="title">匿名树洞</h1>
+            <p class="subtitle">发布心情，表达观点。点赞和取消点赞已拆分为独立操作。</p>
+            <div class="theme-switch">
+                <button class="theme-btn" data-theme-option="sky">清新蓝</button>
+                <button class="theme-btn" data-theme-option="forest">森林绿</button>
+                <button class="theme-btn" data-theme-option="sunset">日落橙</button>
+            </div>
+        </div>
+        <div class="status-board">
+            <span class="badge" id="total-count">树洞 0 条</span>
+            <span class="badge">匿名保护开启</span>
+            <span class="badge">文明发言模式</span>
+        </div>
+    </section>
 
-<ul id="list"></ul>
+    <section class="composer">
+        <textarea id="text" placeholder="说点什么..."></textarea>
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <button class="btn-primary" onclick="publish()">发布</button>
+            </div>
+            <select id="sort" onchange="load()">
+                <option value="time">最新</option>
+                <option value="hot">最热</option>
+            </select>
+        </div>
+    </section>
+
+    <ul id="list"></ul>
+</main>
 
 <script src="app.js"></script>
 </body>
