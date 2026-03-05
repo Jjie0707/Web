@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo</title>
+	<script src="jquery-4.0.0.min.js"></script>
+	
+</head>
+<body>
+	<img src="src/p1.jpg" width="200" id="p">
+	<script>
+		$("#p").click(function(){
+            if($("#p").attr("src")==="src/p1.jpg"){
+                $("#p").attr("src","src/p2.jpg");
+			}else{
+                $("#p").attr("src","src/p1.jpg");
+			}
+		})
+	</script>
+</body>
+</html>
